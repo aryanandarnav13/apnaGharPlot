@@ -53,6 +53,8 @@ const AdminPlots = () => {
     try {
       const submitData = {
         ...formData,
+        // Automatically set main image to first image in array (for cards/listings)
+        image: formData.images && formData.images.length > 0 ? formData.images[0] : formData.image,
         features: formData.features ? JSON.stringify(formData.features.split(',').map(f => f.trim())) : null,
         images: formData.images && formData.images.length > 0 ? JSON.stringify(formData.images) : null,
         videos: formData.videos && formData.videos.length > 0 ? JSON.stringify(formData.videos) : null
