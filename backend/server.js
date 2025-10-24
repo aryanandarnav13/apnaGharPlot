@@ -62,6 +62,60 @@ app.get('/health', (req, res) => {
   });
 });
 
+// Seed database route (for initial setup only)
+app.get('/seed-database', async (req, res) => {
+  try {
+    // Import seed function
+    const { User, Plot, HouseDesign, Inquiry, OwnerInfo, Settings } = require('./models');
+    const bcrypt = require('bcryptjs');
+    
+    console.log('🌱 Starting database seeding via endpoint...');
+
+    // Create Admin User
+    const adminExists = await User.findOne({ where: { email: 'admin@example.com' } });
+    if (!adminExists) {
+      await User.create({
+        name: 'Admin User',
+        email: 'admin@example.com',
+        password: 'password123',
+        phone: '9876543210',
+        role: 'admin'
+      });
+      console.log('✅ Admin user created');
+    } else {
+      console.log('ℹ️ Admin user already exists');
+    }
+
+    // Check if data already exists
+    const plotCount = await Plot.count();
+    if (plotCount > 0) {
+      return res.json({
+        success: true,
+        message: 'Database already seeded!',
+        plotCount,
+        note: 'Admin credentials: admin@example.com / password123'
+      });
+    }
+
+    // Run full seed (you can copy more from config/seed.js if needed)
+    res.json({
+      success: true,
+      message: 'Database seeding completed! Admin user created.',
+      credentials: {
+        email: 'admin@example.com',
+        password: 'password123'
+      }
+    });
+  } catch (error) {
+    console.error('❌ Error seeding database:', error);
+    res.status(500).json({
+      success: false,
+      message: 'Error seeding database',
+      error: error.message
+    });
+  }
+});
+
 // Migration route to fix email column
 app.get('/migrate/fix-email', async (req, res) => {
   try {
