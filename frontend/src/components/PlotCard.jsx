@@ -6,6 +6,18 @@ import { FaMapMarkerAlt, FaRulerCombined } from 'react-icons/fa';
 const PlotCard = ({ plot }) => {
   const { t, i18n } = useTranslation();
   
+  // Process image URL for backend
+  const API_URL = import.meta.env.VITE_API_URL || 'http://localhost:5000/api';
+  const BACKEND_URL = API_URL.replace('/api', '');
+  
+  const getImageUrl = (url) => {
+    if (!url) return null;
+    if (url.startsWith('/uploads')) {
+      return `${BACKEND_URL}${url}`;
+    }
+    return url;
+  };
+  
   const getStatusColor = (status) => {
     switch (status) {
       case 'available':
@@ -64,11 +76,20 @@ const PlotCard = ({ plot }) => {
   return (
     <div className="bg-white rounded-lg shadow-lg overflow-hidden hover:shadow-xl transition-shadow border-2 border-transparent hover:border-primary">
       <div className="relative">
-        <img
-          src={plot.image || 'https://via.placeholder.com/400x300'}
-          alt={plot.plot_number}
-          className="w-full h-48 object-cover"
-        />
+        {getImageUrl(plot.image) ? (
+          <img
+            src={getImageUrl(plot.image)}
+            alt={plot.plot_number}
+            className="w-full h-48 object-cover"
+            onError={(e) => {
+              e.target.src = 'data:image/svg+xml;base64,PHN2ZyB3aWR0aD0iNDAwIiBoZWlnaHQ9IjMwMCIgeG1sbnM9Imh0dHA6Ly93d3cudzMub3JnLzIwMDAvc3ZnIj48cmVjdCB3aWR0aD0iNDAwIiBoZWlnaHQ9IjMwMCIgZmlsbD0iI2VlZSIvPjx0ZXh0IHg9IjUwJSIgeT0iNTAlIiBmb250LWZhbWlseT0iQXJpYWwiIGZvbnQtc2l6ZT0iMTgiIGZpbGw9IiM5OTkiIHRleHQtYW5jaG9yPSJtaWRkbGUiIGR5PSIuM2VtIj5ObyBJbWFnZTwvdGV4dD48L3N2Zz4=';
+            }}
+          />
+        ) : (
+          <div className="w-full h-48 bg-gray-200 flex items-center justify-center">
+            <span className="text-gray-400 text-sm">{t('plot.noImage') || 'No Image'}</span>
+          </div>
+        )}
         <span className={`absolute top-3 right-3 px-3 py-1 rounded-full font-semibold text-sm shadow-lg ${getStatusColor(plot.status)} capitalize`}>
           {t(`plot.${plot.status}`)}
         </span>
