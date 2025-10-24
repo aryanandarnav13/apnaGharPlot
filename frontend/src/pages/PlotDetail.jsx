@@ -158,6 +158,18 @@ const PlotDetail = () => {
     };
   };
 
+  // Format WhatsApp number for wa.me link
+  const formatWhatsAppLink = (number) => {
+    if (!number) return '';
+    // Remove all non-numeric characters
+    let cleaned = number.replace(/[^0-9]/g, '');
+    // If number doesn't start with country code (91 for India), add it
+    if (cleaned.length === 10) {
+      cleaned = '91' + cleaned;
+    }
+    return `https://wa.me/${cleaned}`;
+  };
+
   const getStatusColor = (status) => {
     switch (status) {
       case 'available':
@@ -501,7 +513,7 @@ const PlotDetail = () => {
                 </a>
 
                 <a
-                  href={`https://wa.me/${contact.whatsapp.replace(/[^0-9]/g, '')}`}
+                  href={formatWhatsAppLink(contact.whatsapp)}
                   target="_blank"
                   rel="noopener noreferrer"
                   className="flex items-center p-4 border-2 border-green-600 rounded-lg hover:bg-green-600 hover:text-white transition"

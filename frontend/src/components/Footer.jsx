@@ -71,7 +71,7 @@ const Footer = () => {
             <ul className="space-y-2 text-gray-400 text-sm">
               <li className="flex items-start">
                 <FaMapMarkerAlt className="mr-2 mt-1 flex-shrink-0" />
-                <span>Sector 45, Gurgaon, Haryana, India</span>
+                <span>Patna, Bihar, India</span>
               </li>
               <li className="flex items-center">
                 <FaEnvelope className="mr-2 flex-shrink-0" />
