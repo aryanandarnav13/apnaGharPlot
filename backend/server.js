@@ -85,8 +85,8 @@ app.get('/seed-database', async (req, res) => {
       });
     }
 
-    // Sync database
-    await sequelize.sync({ alter: true });
+    // Sync database (create tables if they don't exist, but don't alter existing ones)
+    await sequelize.sync({ force: false });
     console.log('✅ Database synced');
 
     // Create Admin User (check if exists first)
