@@ -74,7 +74,7 @@ const Plot = sequelize.define('Plot', {
   price_display: {
     type: DataTypes.ENUM('exact', 'masked', 'hidden'),
     defaultValue: 'exact',
-    comment: 'How to display price: exact amount, masked (25xxxxx), or hidden'
+    comment: 'Price display type: exact / masked / hidden'
   },
   contact_phone: {
     type: DataTypes.STRING,

@@ -89,32 +89,41 @@ app.get('/seed-database', async (req, res) => {
     await sequelize.sync({ alter: true });
     console.log('✅ Database synced');
 
-    // Create Admin User
-    const adminUser = await User.create({
-      name: 'Admin User',
-      email: 'admin@example.com',
-      password: 'password123',
-      phone: '9876543210',
-      role: 'admin'
-    });
+    // Create Admin User (check if exists first)
+    let adminUser = await User.findOne({ where: { email: 'admin@example.com' } });
+    if (!adminUser) {
+      adminUser = await User.create({
+        name: 'Admin User',
+        email: 'admin@example.com',
+        password: 'password123',
+        phone: '9876543210',
+        role: 'admin'
+      });
+    }
 
-    // Create Regular Users
-    const user1 = await User.create({
-      name: 'Rahul Sharma',
-      email: 'rahul@example.com',
-      password: 'password123',
-      phone: '9876543211',
-      role: 'user'
-    });
+    // Create Regular Users (check if exist first)
+    let user1 = await User.findOne({ where: { email: 'rahul@example.com' } });
+    if (!user1) {
+      user1 = await User.create({
+        name: 'Rahul Sharma',
+        email: 'rahul@example.com',
+        password: 'password123',
+        phone: '9876543211',
+        role: 'user'
+      });
+    }
 
-    const user2 = await User.create({
-      name: 'Priya Verma',
-      email: 'priya@example.com',
-      password: 'password123',
-      phone: '9876543212',
-      role: 'user'
-    });
-    console.log('✅ Users created');
+    let user2 = await User.findOne({ where: { email: 'priya@example.com' } });
+    if (!user2) {
+      user2 = await User.create({
+        name: 'Priya Verma',
+        email: 'priya@example.com',
+        password: 'password123',
+        phone: '9876543212',
+        role: 'user'
+      });
+    }
+    console.log('✅ Users checked/created');
 
     // Create Plots
     const plots = await Plot.bulkCreate([
@@ -214,18 +223,23 @@ app.get('/seed-database', async (req, res) => {
     console.log('✅ Inquiries created');
 
     // Create Owner Info
-    await OwnerInfo.create({
-      name: 'Deepak Kumar Singh',
-      name_hi: 'दीपक कुमार सिंह',
-      designation: 'Founder & CEO',
-      designation_hi: 'संस्थापक और सीईओ',
-      bio: 'With over 15 years of experience in real estate, Deepak Kumar Singh founded ApnaGhar Plots LLP to help families achieve their dream of owning land.',
-      bio_hi: 'रियल एस्टेट में 15 वर्षों से अधिक के अनुभव के साथ, दीपक कुमार सिंह ने परिवारों को जमीन खरीदने के सपने को पूरा करने में मदद करने के लिए ApnaGhar Plots LLP की स्थापना की।',
-      photo: 'https://images.unsplash.com/photo-1560250097-0b93528c311a?w=400',
-      order: 1,
-      is_active: true
-    });
-    console.log('✅ Owner info created');
+    const ownerCount = await OwnerInfo.count();
+    if (ownerCount === 0) {
+      await OwnerInfo.create({
+        name: 'Deepak Kumar Singh',
+        name_hi: 'दीपक कुमार सिंह',
+        designation: 'Founder & CEO',
+        designation_hi: 'संस्थापक और सीईओ',
+        bio: 'With over 15 years of experience in real estate, Deepak Kumar Singh founded ApnaGhar Plots LLP to help families achieve their dream of owning land.',
+        bio_hi: 'रियल एस्टेट में 15 वर्षों से अधिक के अनुभव के साथ, दीपक कुमार सिंह ने परिवारों को जमीन खरीदने के सपने को पूरा करने में मदद करने के लिए ApnaGhar Plots LLP की स्थापना की।',
+        photo: 'https://images.unsplash.com/photo-1560250097-0b93528c311a?w=400',
+        order: 1,
+        is_active: true
+      });
+      console.log('✅ Owner info created');
+    } else {
+      console.log('ℹ️ Owner info already exists');
+    }
 
     // Create Settings
     await Settings.bulkCreate([
