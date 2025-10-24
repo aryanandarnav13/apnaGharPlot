@@ -65,45 +65,187 @@ app.get('/health', (req, res) => {
 // Seed database route (for initial setup only)
 app.get('/seed-database', async (req, res) => {
   try {
-    // Import seed function
     const { User, Plot, HouseDesign, Inquiry, OwnerInfo, Settings } = require('./models');
-    const bcrypt = require('bcryptjs');
     
     console.log('🌱 Starting database seeding via endpoint...');
 
-    // Create Admin User
-    const adminExists = await User.findOne({ where: { email: 'admin@example.com' } });
-    if (!adminExists) {
-      await User.create({
-        name: 'Admin User',
-        email: 'admin@example.com',
-        password: 'password123',
-        phone: '9876543210',
-        role: 'admin'
-      });
-      console.log('✅ Admin user created');
-    } else {
-      console.log('ℹ️ Admin user already exists');
-    }
-
-    // Check if data already exists
-    const plotCount = await Plot.count();
-    if (plotCount > 0) {
+    // Check if already seeded
+    const userCount = await User.count();
+    if (userCount > 0) {
       return res.json({
         success: true,
         message: 'Database already seeded!',
-        plotCount,
-        note: 'Admin credentials: admin@example.com / password123'
+        note: 'Admin credentials: admin@example.com / password123',
+        userCount
       });
     }
 
-    // Run full seed (you can copy more from config/seed.js if needed)
+    // Sync database
+    await sequelize.sync({ alter: true });
+    console.log('✅ Database synced');
+
+    // Create Admin User
+    const adminUser = await User.create({
+      name: 'Admin User',
+      email: 'admin@example.com',
+      password: 'password123',
+      phone: '9876543210',
+      role: 'admin'
+    });
+
+    // Create Regular Users
+    const user1 = await User.create({
+      name: 'Rahul Sharma',
+      email: 'rahul@example.com',
+      password: 'password123',
+      phone: '9876543211',
+      role: 'user'
+    });
+
+    const user2 = await User.create({
+      name: 'Priya Verma',
+      email: 'priya@example.com',
+      password: 'password123',
+      phone: '9876543212',
+      role: 'user'
+    });
+    console.log('✅ Users created');
+
+    // Create Plots
+    const plots = await Plot.bulkCreate([
+      {
+        plot_number: 'A-101',
+        location: 'Sector 45, Patna, Bihar',
+        size: '1200 sq ft',
+        price: 2500000,
+        status: 'available',
+        image: 'https://images.unsplash.com/photo-1500382017468-9049fed747ef?w=600',
+        images: JSON.stringify(['https://images.unsplash.com/photo-1500382017468-9049fed747ef?w=800','https://images.unsplash.com/photo-1464146072230-91cabc968266?w=800','https://images.unsplash.com/photo-1501594907352-04cda38ebc29?w=800']),
+        videos: JSON.stringify(['https://commondatastorage.googleapis.com/gtv-videos-bucket/sample/BigBuckBunny.mp4']),
+        description: 'Corner plot with road on two sides',
+        features: JSON.stringify(['Corner Plot', 'Road on Two Sides', 'Water Connection']),
+        map_lat: 25.5941,
+        map_lng: 85.1376,
+        show_price: true,
+        price_display: 'exact'
+      },
+      {
+        plot_number: 'A-102',
+        location: 'Rajgir Road, Patna, Bihar',
+        size: '1500 sq ft',
+        price: 3200000,
+        status: 'available',
+        image: 'https://images.unsplash.com/photo-1464146072230-91cabc968266?w=600',
+        images: JSON.stringify(['https://images.unsplash.com/photo-1464146072230-91cabc968266?w=800','https://images.unsplash.com/photo-1506905925346-21bda4d32df4?w=800']),
+        description: 'Spacious plot with garden area',
+        features: JSON.stringify(['Spacious', 'Garden Area', 'Water Connection']),
+        map_lat: 25.5941,
+        map_lng: 85.1376,
+        show_price: true,
+        price_display: 'masked'
+      },
+      {
+        plot_number: 'A-103',
+        location: 'Boring Road, Patna, Bihar',
+        size: '1800 sq ft',
+        price: 3800000,
+        status: 'booked',
+        image: 'https://images.unsplash.com/photo-1501594907352-04cda38ebc29?w=600',
+        images: JSON.stringify(['https://images.unsplash.com/photo-1501594907352-04cda38ebc29?w=800']),
+        description: 'Premium plot with park view',
+        features: JSON.stringify(['Park View', 'Premium Location']),
+        map_lat: 25.5941,
+        map_lng: 85.1376,
+        show_price: false,
+        price_display: 'hidden'
+      },
+      {
+        plot_number: 'B-201',
+        location: 'Bailey Road, Patna, Bihar',
+        size: '2000 sq ft',
+        price: 4200000,
+        status: 'available',
+        image: 'https://images.unsplash.com/photo-1506905925346-21bda4d32df4?w=600',
+        images: JSON.stringify(['https://images.unsplash.com/photo-1506905925346-21bda4d32df4?w=800','https://images.unsplash.com/photo-1433086966358-54859d0ed716?w=800']),
+        description: 'Large plot suitable for luxury villa',
+        features: JSON.stringify(['Large Area', 'Park Nearby']),
+        map_lat: 25.5941,
+        map_lng: 85.1376,
+        show_price: true,
+        price_display: 'exact'
+      },
+      {
+        plot_number: 'B-202',
+        location: 'Kankarbagh, Patna, Bihar',
+        size: '1000 sq ft',
+        price: 2100000,
+        status: 'available',
+        image: 'https://images.unsplash.com/photo-1519681393784-d120267933ba?w=600',
+        images: JSON.stringify(['https://images.unsplash.com/photo-1519681393784-d120267933ba?w=800']),
+        description: 'Compact plot perfect for modern home',
+        features: JSON.stringify(['Compact', 'Modern Area']),
+        map_lat: 25.5941,
+        map_lng: 85.1376,
+        show_price: true,
+        price_display: 'masked'
+      }
+    ]);
+    console.log('✅ Plots created');
+
+    // Create House Designs
+    await HouseDesign.bulkCreate([
+      { plot_id: plots[0].id, image: 'https://images.unsplash.com/photo-1568605114258-295458900270?w=600', images: JSON.stringify(['https://images.unsplash.com/photo-1568605114258-295458900270?w=800']), estimated_construction_cost: 1500000 },
+      { plot_id: plots[0].id, image: 'https://images.unsplash.com/photo-1570129477492-45c003edd2fe?w=600', images: JSON.stringify(['https://images.unsplash.com/photo-1570129477492-45c003edd2fe?w=800']), estimated_construction_cost: 1800000 },
+      { plot_id: plots[1].id, image: 'https://images.unsplash.com/photo-1582268611958-ab5d8124d16a?w=600', images: JSON.stringify(['https://images.unsplash.com/photo-1582268611958-ab5d8124d16a?w=800']), estimated_construction_cost: 2000000 }
+    ]);
+    console.log('✅ House designs created');
+
+    // Create Inquiries
+    await Inquiry.bulkCreate([
+      { user_id: null, plot_id: plots[2].id, name: 'Rahul Kumar', phone: '+91 9876543211', email: null, status: 'booked', message: 'Very interested in this plot' },
+      { user_id: null, plot_id: plots[0].id, name: 'Priya Singh', phone: '+91 9876543212', email: null, status: 'in_progress', message: 'Would like to know more details' },
+      { user_id: null, plot_id: plots[3].id, name: 'Amit Sharma', phone: '+91 9876543213', email: null, status: 'inquired', message: 'Interested in this plot' }
+    ]);
+    console.log('✅ Inquiries created');
+
+    // Create Owner Info
+    await OwnerInfo.create({
+      name: 'Deepak Kumar Singh',
+      name_hi: 'दीपक कुमार सिंह',
+      designation: 'Founder & CEO',
+      designation_hi: 'संस्थापक और सीईओ',
+      bio: 'With over 15 years of experience in real estate, Deepak Kumar Singh founded ApnaGhar Plots LLP to help families achieve their dream of owning land.',
+      bio_hi: 'रियल एस्टेट में 15 वर्षों से अधिक के अनुभव के साथ, दीपक कुमार सिंह ने परिवारों को जमीन खरीदने के सपने को पूरा करने में मदद करने के लिए ApnaGhar Plots LLP की स्थापना की।',
+      photo: 'https://images.unsplash.com/photo-1560250097-0b93528c311a?w=400',
+      order: 1,
+      is_active: true
+    });
+    console.log('✅ Owner info created');
+
+    // Create Settings
+    await Settings.bulkCreate([
+      { key: 'default_language', value: 'hi', description: 'Default language (hi = Hindi, en = English)' },
+      { key: 'default_contact_phone', value: '+91 9876543210', description: 'Default contact phone' },
+      { key: 'default_contact_email', value: 'contact@apnagharplots.com', description: 'Default contact email' },
+      { key: 'default_contact_whatsapp', value: '+919876543210', description: 'Default WhatsApp number' }
+    ]);
+    console.log('✅ Settings created');
+
     res.json({
       success: true,
-      message: 'Database seeding completed! Admin user created.',
+      message: '🎉 Database fully seeded!',
+      data: {
+        users: 3,
+        plots: 5,
+        houseDesigns: 3,
+        inquiries: 3,
+        ownerInfo: 1,
+        settings: 4
+      },
       credentials: {
-        email: 'admin@example.com',
-        password: 'password123'
+        admin: 'admin@example.com / password123',
+        user1: 'rahul@example.com / password123',
+        user2: 'priya@example.com / password123'
       }
     });
   } catch (error) {
@@ -111,7 +253,8 @@ app.get('/seed-database', async (req, res) => {
     res.status(500).json({
       success: false,
       message: 'Error seeding database',
-      error: error.message
+      error: error.message,
+      stack: process.env.NODE_ENV === 'development' ? error.stack : undefined
     });
   }
 });
