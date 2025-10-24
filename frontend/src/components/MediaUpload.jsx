@@ -3,6 +3,9 @@ import { FaPlus, FaTrash, FaLink, FaUpload, FaImage, FaVideo } from 'react-icons
 import { toast } from 'react-toastify';
 import axios from 'axios';
 
+const API_URL = import.meta.env.VITE_API_URL || 'http://localhost:5000/api';
+const BACKEND_URL = API_URL.replace('/api', ''); // For serving uploaded files
+
 const MediaUpload = ({ existingMedia = { images: [], videos: [] }, onMediaChange }) => {
   const [media, setMedia] = useState(existingMedia);
   const [imageUrl, setImageUrl] = useState('');
@@ -43,7 +46,7 @@ const MediaUpload = ({ existingMedia = { images: [], videos: [] }, onMediaChange
 
     try {
       const token = localStorage.getItem('token');
-      const res = await axios.post('http://localhost:5000/api/upload/media', formData, {
+      const res = await axios.post(`${API_URL}/upload/media`, formData, {
         headers: {
           'Content-Type': 'multipart/form-data',
           Authorization: `Bearer ${token}`
@@ -175,7 +178,7 @@ const MediaUpload = ({ existingMedia = { images: [], videos: [] }, onMediaChange
             {media.images.map((img, index) => (
               <div key={index} className="relative group">
                 <img
-                  src={img.startsWith('/uploads') ? `http://localhost:5000${img}` : img}
+                  src={img.startsWith('/uploads') ? `${BACKEND_URL}${img}` : img}
                   alt={`Preview ${index}`}
                   className="w-full h-32 object-cover rounded-lg border-2 border-gray-200 group-hover:border-bihar-yellow transition"
                 />
@@ -206,7 +209,7 @@ const MediaUpload = ({ existingMedia = { images: [], videos: [] }, onMediaChange
             {media.videos.map((vid, index) => (
               <div key={index} className="relative group bg-black rounded-lg overflow-hidden border-2 border-gray-200 group-hover:border-bihar-orange transition">
                 <video
-                  src={vid.startsWith('/uploads') ? `http://localhost:5000${vid}` : vid}
+                  src={vid.startsWith('/uploads') ? `${BACKEND_URL}${vid}` : vid}
                   className="w-full h-48 object-contain"
                   controls
                 />

@@ -3,6 +3,8 @@ import axios from 'axios';
 import { toast } from 'react-toastify';
 import { FaUpload, FaLink, FaTimes, FaImage } from 'react-icons/fa';
 
+const API_URL = import.meta.env.VITE_API_URL || 'http://localhost:5000/api';
+
 const ImageUpload = ({ onImagesChange, existingImages = [], multiple = false, label = "Images" }) => {
   const [uploadMethod, setUploadMethod] = useState('url'); // 'url' or 'upload'
   const [imageUrl, setImageUrl] = useState('');
@@ -40,7 +42,7 @@ const ImageUpload = ({ onImagesChange, existingImages = [], multiple = false, la
           formData.append('images', file);
         });
 
-        const response = await axios.post('http://localhost:5000/api/upload/multiple', formData, {
+        const response = await axios.post(`${API_URL}/upload/multiple`, formData, {
           headers: {
             'Content-Type': 'multipart/form-data',
             'Authorization': `Bearer ${token}`
@@ -56,7 +58,7 @@ const ImageUpload = ({ onImagesChange, existingImages = [], multiple = false, la
         // Upload single file
         formData.append('image', files[0]);
 
-        const response = await axios.post('http://localhost:5000/api/upload/single', formData, {
+        const response = await axios.post(`${API_URL}/upload/single`, formData, {
           headers: {
             'Content-Type': 'multipart/form-data',
             'Authorization': `Bearer ${token}`

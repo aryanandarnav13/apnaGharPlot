@@ -241,14 +241,21 @@ app.get('/seed-database', async (req, res) => {
       console.log('ℹ️ Owner info already exists');
     }
 
-    // Create Settings
-    await Settings.bulkCreate([
+    // Create Settings (check if exist first)
+    const settingsData = [
       { key: 'default_language', value: 'hi', description: 'Default language (hi = Hindi, en = English)' },
       { key: 'default_contact_phone', value: '+91 9876543210', description: 'Default contact phone' },
       { key: 'default_contact_email', value: 'contact@apnagharplots.com', description: 'Default contact email' },
       { key: 'default_contact_whatsapp', value: '+919876543210', description: 'Default WhatsApp number' }
-    ]);
-    console.log('✅ Settings created');
+    ];
+    
+    for (const setting of settingsData) {
+      const exists = await Settings.findOne({ where: { key: setting.key } });
+      if (!exists) {
+        await Settings.create(setting);
+      }
+    }
+    console.log('✅ Settings created/checked');
 
     res.json({
       success: true,
