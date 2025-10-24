@@ -69,14 +69,19 @@ app.get('/seed-database', async (req, res) => {
     
     console.log('🌱 Starting database seeding via endpoint...');
 
-    // Check if already seeded
-    const userCount = await User.count();
-    if (userCount > 0) {
+    // Check if already fully seeded (check for plots instead of users)
+    const plotCount = await Plot.count();
+    const settingsCount = await Settings.count();
+    
+    if (plotCount > 0 && settingsCount > 0) {
       return res.json({
         success: true,
-        message: 'Database already seeded!',
+        message: 'Database already fully seeded!',
         note: 'Admin credentials: admin@example.com / password123',
-        userCount
+        data: {
+          plots: plotCount,
+          settings: settingsCount
+        }
       });
     }
 
