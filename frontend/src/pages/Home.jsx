@@ -71,7 +71,7 @@ const Home = () => {
                       {info.photo && (
                         <div className="relative">
                           <img
-                            src={info.photo.startsWith('/uploads') ? `http://localhost:5000${info.photo}` : info.photo}
+                            src={info.photo.startsWith('/uploads') ? `${import.meta.env.VITE_API_URL?.replace('/api', '') || 'http://localhost:5000'}${info.photo}` : info.photo}
                             alt={info.name}
                             className="w-20 h-20 rounded-xl object-cover ring-4 ring-white/30"
                           />

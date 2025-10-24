@@ -289,8 +289,10 @@ const AdminHouseDesigns = () => {
                     House Design Images
                   </label>
                   <ImageUpload
-                    images={formData.images}
-                    setImages={handleImagesChange}
+                    existingImages={formData.images}
+                    onImagesChange={handleImagesChange}
+                    multiple={true}
+                    label="House Design Images"
                   />
                   <p className="text-sm text-gray-500 mt-1">
                     Upload multiple images of the house design (floor plans, renders, etc.)

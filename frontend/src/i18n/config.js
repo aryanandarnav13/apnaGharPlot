@@ -45,8 +45,8 @@ const fetchAndApplyDefaultLanguage = async () => {
   // Only fetch default if user hasn't set their own preference
   if (!userSetLanguage) {
     try {
-      const API_URL = process.env.REACT_APP_API_URL || 'http://localhost:5000';
-      const response = await fetch(`${API_URL}/api/settings/default_language`);
+      const API_URL = import.meta.env.VITE_API_URL || 'http://localhost:5000/api';
+      const response = await fetch(`${API_URL}/settings/default_language`);
       const data = await response.json();
       
       if (data.success && data.data.value) {

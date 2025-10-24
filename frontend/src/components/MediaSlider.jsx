@@ -87,10 +87,13 @@ const MediaSlider = ({ media = [], autoSlide = true, interval = 5000 }) => {
   const currentMediaUrl = getMediaUrl(currentMedia);
   const currentIsVideo = isVideo(currentMedia);
 
-  // Process URL for localhost
+  // Process URL for backend
+  const API_URL = import.meta.env.VITE_API_URL || 'http://localhost:5000/api';
+  const BACKEND_URL = API_URL.replace('/api', '');
+  
   const processUrl = (url) => {
     if (url?.startsWith('/uploads')) {
-      return `http://localhost:5000${url}`;
+      return `${BACKEND_URL}${url}`;
     }
     return url;
   };

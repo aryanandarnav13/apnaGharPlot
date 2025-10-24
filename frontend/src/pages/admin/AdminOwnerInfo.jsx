@@ -176,7 +176,7 @@ const AdminOwnerInfo = () => {
                     <td className="px-6 py-4 whitespace-nowrap">
                       {info.photo ? (
                         <img
-                          src={info.photo.startsWith('/uploads') ? `http://localhost:5000${info.photo}` : info.photo}
+                          src={info.photo.startsWith('/uploads') ? `${import.meta.env.VITE_API_URL?.replace('/api', '') || 'http://localhost:5000'}${info.photo}` : info.photo}
                           alt={info.name}
                           className="h-12 w-12 rounded-full object-cover"
                         />
