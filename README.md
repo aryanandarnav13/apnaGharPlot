@@ -140,7 +140,7 @@ apnaGharPlot/
 
 ### 1. Clone Repository
 ```bash
-git clone <your-repo-url>
+git clone https://github.com/aryanandarnav13/apnaGharPlot.git
 cd apnaGharPlot
 ```
 
@@ -364,14 +364,9 @@ For any issues or questions, please open an issue on GitHub or contact the devel
 
 ---
 
-## 📄 License
-
-This project is licensed under the MIT License.
-
----
-
 ## 👨‍💻 Developer
 
-Built for ApnaGhar Plots LLP - Making land ownership accessible.
+Built for ApnaGhar Plots - Making land ownership accessible.
+
 
 
