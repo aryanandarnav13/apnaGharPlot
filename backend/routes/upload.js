@@ -2,13 +2,13 @@ const express = require('express');
 const router = express.Router();
 const { uploadImages, uploadVideos, uploadMedia } = require('../middleware/upload');
 const { protect, authorize } = require('../middleware/auth');
-const path = require('path');
+const cloudinary = require('../config/cloudinary');
 
 // @route   POST /api/upload/single
 // @desc    Upload single image
 // @access  Private/Admin
 router.post('/single', protect, authorize('admin'), (req, res) => {
-  uploadImages.single('image')(req, res, (err) => {
+  uploadImages.single('image')(req, res, async (err) => {
     if (err) {
       return res.status(400).json({
         success: false,
@@ -24,21 +24,35 @@ router.post('/single', protect, authorize('admin'), (req, res) => {
         });
       }
 
-      const imageUrl = `/uploads/${req.file.filename}`;
+      // Upload to Cloudinary using buffer
+      const result = await new Promise((resolve, reject) => {
+        const uploadStream = cloudinary.uploader.upload_stream(
+          {
+            folder: 'apnaghar-plots',
+            resource_type: 'image'
+          },
+          (error, result) => {
+            if (error) reject(error);
+            else resolve(result);
+          }
+        );
+        uploadStream.end(req.file.buffer);
+      });
 
       res.status(200).json({
         success: true,
         message: 'Image uploaded successfully',
         data: {
-          filename: req.file.filename,
-          url: imageUrl,
-          fullUrl: `${req.protocol}://${req.get('host')}${imageUrl}`
+          filename: result.public_id,
+          url: result.secure_url,
+          fullUrl: result.secure_url
         }
       });
     } catch (error) {
+      console.error('Cloudinary upload error:', error);
       res.status(500).json({
         success: false,
-        message: 'Error uploading image'
+        message: error.message || 'Error uploading image to cloud'
       });
     }
   });
@@ -48,7 +62,7 @@ router.post('/single', protect, authorize('admin'), (req, res) => {
 // @desc    Upload multiple images
 // @access  Private/Admin
 router.post('/multiple', protect, authorize('admin'), (req, res) => {
-  uploadImages.array('images', 10)(req, res, (err) => {
+  uploadImages.array('images', 10)(req, res, async (err) => {
     if (err) {
       return res.status(400).json({
         success: false,
@@ -64,10 +78,29 @@ router.post('/multiple', protect, authorize('admin'), (req, res) => {
         });
       }
 
-      const images = req.files.map(file => ({
-        filename: file.filename,
-        url: `/uploads/${file.filename}`,
-        fullUrl: `${req.protocol}://${req.get('host')}/uploads/${file.filename}`
+      // Upload all files to Cloudinary
+      const uploadPromises = req.files.map(file => {
+        return new Promise((resolve, reject) => {
+          const uploadStream = cloudinary.uploader.upload_stream(
+            {
+              folder: 'apnaghar-plots',
+              resource_type: 'image'
+            },
+            (error, result) => {
+              if (error) reject(error);
+              else resolve(result);
+            }
+          );
+          uploadStream.end(file.buffer);
+        });
+      });
+
+      const results = await Promise.all(uploadPromises);
+
+      const images = results.map(result => ({
+        filename: result.public_id,
+        url: result.secure_url,
+        fullUrl: result.secure_url
       }));
 
       res.status(200).json({
@@ -76,9 +109,10 @@ router.post('/multiple', protect, authorize('admin'), (req, res) => {
         data: images
       });
     } catch (error) {
+      console.error('Cloudinary upload error:', error);
       res.status(500).json({
         success: false,
-        message: 'Error uploading images'
+        message: error.message || 'Error uploading images to cloud'
       });
     }
   });
@@ -88,7 +122,7 @@ router.post('/multiple', protect, authorize('admin'), (req, res) => {
 // @desc    Upload multiple media files (images and videos)
 // @access  Private/Admin
 router.post('/media', protect, authorize('admin'), (req, res) => {
-  uploadMedia.array('media', 20)(req, res, (err) => {
+  uploadMedia.array('media', 20)(req, res, async (err) => {
     if (err) {
       console.error('Upload error:', err);
       return res.status(400).json({
@@ -105,12 +139,33 @@ router.post('/media', protect, authorize('admin'), (req, res) => {
         });
       }
 
-      const media = req.files.map(file => ({
-        filename: file.filename,
-        url: `/uploads/${file.filename}`,
-        fullUrl: `${req.protocol}://${req.get('host')}/uploads/${file.filename}`,
-        type: file.mimetype.startsWith('image') ? 'image' : 'video',
-        size: file.size
+      // Upload all files to Cloudinary
+      const uploadPromises = req.files.map(file => {
+        const resourceType = file.mimetype.startsWith('image') ? 'image' : 'video';
+        
+        return new Promise((resolve, reject) => {
+          const uploadStream = cloudinary.uploader.upload_stream(
+            {
+              folder: 'apnaghar-plots',
+              resource_type: resourceType
+            },
+            (error, result) => {
+              if (error) reject(error);
+              else resolve({ ...result, type: resourceType });
+            }
+          );
+          uploadStream.end(file.buffer);
+        });
+      });
+
+      const results = await Promise.all(uploadPromises);
+
+      const media = results.map(result => ({
+        filename: result.public_id,
+        url: result.secure_url,
+        fullUrl: result.secure_url,
+        type: result.type,
+        size: result.bytes
       }));
 
       res.status(200).json({
@@ -119,10 +174,10 @@ router.post('/media', protect, authorize('admin'), (req, res) => {
         data: media
       });
     } catch (error) {
-      console.error('Upload error:', error);
+      console.error('Cloudinary upload error:', error);
       res.status(500).json({
         success: false,
-        message: error.message || 'Error uploading files'
+        message: error.message || 'Error uploading files to cloud'
       });
     }
   });

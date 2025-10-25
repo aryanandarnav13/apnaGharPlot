@@ -87,11 +87,16 @@ const MediaSlider = ({ media = [], autoSlide = true, interval = 5000 }) => {
   const currentMediaUrl = getMediaUrl(currentMedia);
   const currentIsVideo = isVideo(currentMedia);
 
-  // Process URL for backend
+  // Process URL - handle both Cloudinary URLs and legacy local uploads
   const API_URL = import.meta.env.VITE_API_URL || 'http://localhost:5000/api';
   const BACKEND_URL = API_URL.replace('/api', '');
   
   const processUrl = (url) => {
+    // If it's already a full URL (Cloudinary or external), use as-is
+    if (url?.startsWith('http://') || url?.startsWith('https://')) {
+      return url;
+    }
+    // If it's a legacy local path, prepend backend URL
     if (url?.startsWith('/uploads')) {
       return `${BACKEND_URL}${url}`;
     }

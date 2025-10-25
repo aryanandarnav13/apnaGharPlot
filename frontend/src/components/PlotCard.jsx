@@ -12,6 +12,11 @@ const PlotCard = ({ plot }) => {
   
   const getImageUrl = (url) => {
     if (!url) return null;
+    // If it's already a full URL (Cloudinary or external), use as-is
+    if (url.startsWith('http://') || url.startsWith('https://')) {
+      return url;
+    }
+    // If it's a legacy local path, prepend backend URL
     if (url.startsWith('/uploads')) {
       return `${BACKEND_URL}${url}`;
     }

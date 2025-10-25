@@ -32,8 +32,8 @@ app.use(cors({
 // Connect to database
 connectDB();
 
-// Serve uploaded files
-app.use('/uploads', express.static('uploads'));
+// Note: File uploads are now handled by Cloudinary (cloud storage)
+// No need to serve static files from /uploads folder
 
 // Mount routes
 app.use('/api/auth', authRoutes);
