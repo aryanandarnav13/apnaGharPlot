@@ -8,7 +8,7 @@ A modern, full-stack web application for land selling and plot management busine
 
 ## 📋 Description
 
-ApnaGhar Plots LLP is a bilingual (Hindi/English) real estate platform designed specifically for land selling businesses in Bihar. The application features a modern UI with traditional Bihar aesthetics, complete admin dashboard, inquiry management system, and secure cloud storage for media files.
+ApnaGhar Plots LLP is a bilingual (Hindi/English) real estate platform designed specifically for land selling businesses. The application features a modern UI, complete admin dashboard, inquiry management system, and secure cloud storage for media files.
 
 ---
 
@@ -375,3 +375,4 @@ This project is licensed under the MIT License.
 Built for ApnaGhar Plots LLP - Making land ownership accessible in Bihar.
 
 **Founder**: Deepak Kumar Singh
+
