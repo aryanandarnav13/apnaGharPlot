@@ -1,6 +1,6 @@
-# 🏡 ApnaGhar Plots LLP
+# 🏡 ApnaGhar Plots
 
-A modern, full-stack web application for land selling and plot management business in Bihar. Built with React, Node.js, Express, PostgreSQL, and Cloudinary for permanent image storage.
+A modern, full-stack web application for land selling and plot management business. Built with React, Node.js, Express, PostgreSQL, and Cloudinary for permanent image storage.
 
 **Live Application**: [https://apna-ghar-plot.vercel.app](https://apna-ghar-plot.vercel.app)
 
@@ -372,7 +372,6 @@ This project is licensed under the MIT License.
 
 ## 👨‍💻 Developer
 
-Built for ApnaGhar Plots LLP - Making land ownership accessible in Bihar.
+Built for ApnaGhar Plots LLP - Making land ownership accessible.
 
-**Founder**: Deepak Kumar Singh
 
