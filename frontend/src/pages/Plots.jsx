@@ -14,6 +14,7 @@ const Plots = () => {
   const [statusFilter, setStatusFilter] = useState('all');
   const [priceFilter, setPriceFilter] = useState('all');
   const [locationFilter, setLocationFilter] = useState('all');
+  const [showFilters, setShowFilters] = useState(false);
 
   useEffect(() => {
     fetchData();
@@ -101,28 +102,41 @@ const Plots = () => {
       <section className="py-12">
         <div className="container mx-auto px-4">
           <BackButton to="/" />
+          
+          {/* Mobile Filter Toggle Button */}
+          <button
+            onClick={() => setShowFilters(!showFilters)}
+            className="md:hidden w-full mb-4 flex items-center justify-center gap-2 bg-primary text-white py-3 rounded-lg shadow-md hover:shadow-lg transition font-semibold"
+          >
+            <FaFilter />
+            {showFilters ? (i18n.language === 'hi' ? 'फ़िल्टर छिपाएं' : 'Hide Filters') : (i18n.language === 'hi' ? 'फ़िल्टर दिखाएं' : 'Show Filters')}
+            <span className="ml-1 bg-white text-primary px-2 py-1 rounded-full text-xs">
+              {(statusFilter !== 'all' || priceFilter !== 'all' || locationFilter !== 'all') ? '●' : ''}
+            </span>
+          </button>
+
           <div className="flex flex-col md:flex-row gap-6">
             {/* Filters Sidebar */}
-            <div className="w-full md:w-64 flex-shrink-0">
-              <div className="card p-6 sticky top-24">
-                <h3 className="flex items-center text-lg font-montserrat font-bold mb-4 text-primary">
+            <div className={`w-full md:w-64 flex-shrink-0 ${showFilters ? 'block' : 'hidden md:block'}`}>
+              <div className="card p-6 md:sticky md:top-24">
+                <h3 className={`flex items-center text-lg font-bold mb-4 text-primary ${i18n.language === 'hi' ? 'font-hindi' : 'font-montserrat'}`}>
                   <FaFilter className="mr-2" />
-                  Filters
+                  {i18n.language === 'hi' ? 'फ़िल्टर' : 'Filters'}
                 </h3>
 
                 {/* Location Filter */}
                 {uniqueLocations.length > 1 && (
                   <div className="mb-4">
-                    <label className="block text-sm font-semibold text-gray-700 mb-2 flex items-center">
+                    <label className={`block text-sm font-semibold text-gray-700 mb-2 flex items-center ${i18n.language === 'hi' ? 'font-hindi' : ''}`}>
                       <FaMapMarkerAlt className="mr-1 text-secondary" />
-                      Location
+                      {i18n.language === 'hi' ? 'स्थान' : 'Location'}
                     </label>
                     <select
                       value={locationFilter}
                       onChange={(e) => setLocationFilter(e.target.value)}
-                      className="w-full border border-gray-300 rounded-lg px-3 py-2 focus:outline-none focus:ring-2 focus:ring-primary"
+                      className={`w-full border border-gray-300 rounded-lg px-3 py-2 focus:outline-none focus:ring-2 focus:ring-primary ${i18n.language === 'hi' ? 'font-hindi' : ''}`}
                     >
-                      <option value="all">All Locations</option>
+                      <option value="all">{i18n.language === 'hi' ? 'सभी स्थान' : 'All Locations'}</option>
                       {uniqueLocations.map((loc) => (
                         <option key={loc} value={loc}>
                           {loc}
@@ -134,35 +148,35 @@ const Plots = () => {
 
                 {/* Status Filter */}
                 <div className="mb-4">
-                  <label className="block text-sm font-semibold text-gray-700 mb-2">
-                    Status
+                  <label className={`block text-sm font-semibold text-gray-700 mb-2 ${i18n.language === 'hi' ? 'font-hindi' : ''}`}>
+                    {i18n.language === 'hi' ? 'स्थिति' : 'Status'}
                   </label>
                   <select
                     value={statusFilter}
                     onChange={(e) => setStatusFilter(e.target.value)}
-                    className="w-full border border-gray-300 rounded-lg px-3 py-2 focus:outline-none focus:ring-2 focus:ring-primary"
+                    className={`w-full border border-gray-300 rounded-lg px-3 py-2 focus:outline-none focus:ring-2 focus:ring-primary ${i18n.language === 'hi' ? 'font-hindi' : ''}`}
                   >
-                    <option value="all">All Status</option>
-                    <option value="available">Available</option>
-                    <option value="booked">Booked</option>
-                    <option value="sold">Sold</option>
+                    <option value="all">{i18n.language === 'hi' ? 'सभी स्थिति' : 'All Status'}</option>
+                    <option value="available">{i18n.language === 'hi' ? 'उपलब्ध' : 'Available'}</option>
+                    <option value="booked">{i18n.language === 'hi' ? 'बुक किया गया' : 'Booked'}</option>
+                    <option value="sold">{i18n.language === 'hi' ? 'बिक गया' : 'Sold'}</option>
                   </select>
                 </div>
 
                 {/* Price Filter */}
                 <div className="mb-4">
-                  <label className="block text-sm font-semibold text-gray-700 mb-2">
-                    Price Range
+                  <label className={`block text-sm font-semibold text-gray-700 mb-2 ${i18n.language === 'hi' ? 'font-hindi' : ''}`}>
+                    {i18n.language === 'hi' ? 'मूल्य सीमा' : 'Price Range'}
                   </label>
                   <select
                     value={priceFilter}
                     onChange={(e) => setPriceFilter(e.target.value)}
-                    className="w-full border border-gray-300 rounded-lg px-3 py-2 focus:outline-none focus:ring-2 focus:ring-primary"
+                    className={`w-full border border-gray-300 rounded-lg px-3 py-2 focus:outline-none focus:ring-2 focus:ring-primary ${i18n.language === 'hi' ? 'font-hindi' : ''}`}
                   >
-                    <option value="all">All Prices</option>
-                    <option value="low">Below ₹30 Lakhs</option>
-                    <option value="medium">₹30 - ₹50 Lakhs</option>
-                    <option value="high">Above ₹50 Lakhs</option>
+                    <option value="all">{i18n.language === 'hi' ? 'सभी कीमत' : 'All Prices'}</option>
+                    <option value="low">{i18n.language === 'hi' ? '₹30 लाख से कम' : 'Below ₹30 Lakhs'}</option>
+                    <option value="medium">{i18n.language === 'hi' ? '₹30 - ₹50 लाख' : '₹30 - ₹50 Lakhs'}</option>
+                    <option value="high">{i18n.language === 'hi' ? '₹50 लाख से अधिक' : 'Above ₹50 Lakhs'}</option>
                   </select>
                 </div>
 
@@ -171,10 +185,11 @@ const Plots = () => {
                     setLocationFilter('all');
                     setStatusFilter('all');
                     setPriceFilter('all');
+                    setShowFilters(false); // Close filters on mobile after reset
                   }}
-                  className="w-full bg-secondary hover:bg-secondary-dark text-white py-2 rounded-lg shadow-md hover:shadow-lg transition text-sm font-semibold"
+                  className={`w-full bg-secondary hover:bg-secondary-dark text-white py-2 rounded-lg shadow-md hover:shadow-lg transition text-sm font-semibold ${i18n.language === 'hi' ? 'font-hindi' : ''}`}
                 >
-                  Reset Filters
+                  {i18n.language === 'hi' ? 'फ़िल्टर रीसेट करें' : 'Reset Filters'}
                 </button>
               </div>
             </div>
@@ -182,8 +197,8 @@ const Plots = () => {
             {/* Plots Grid */}
             <div className="flex-1">
               <div className="mb-6">
-                <h2 className="text-2xl font-montserrat font-bold text-gray-800">
-                  Available Plots
+                <h2 className={`text-2xl font-bold text-gray-800 ${i18n.language === 'hi' ? 'font-hindi' : 'font-montserrat'}`}>
+                  {i18n.language === 'hi' ? 'उपलब्ध प्लॉट' : 'Available Plots'}
                   <span className="text-primary ml-2">({filteredPlots.length})</span>
                 </h2>
               </div>
@@ -196,8 +211,8 @@ const Plots = () => {
                 </div>
               ) : (
                 <div className="text-center py-12">
-                  <p className="text-gray-600 text-lg">
-                    No plots found matching your criteria
+                  <p className={`text-gray-600 text-lg ${i18n.language === 'hi' ? 'font-hindi' : ''}`}>
+                    {i18n.language === 'hi' ? 'आपके मानदंडों से मेल खाने वाला कोई प्लॉट नहीं मिला' : 'No plots found matching your criteria'}
                   </p>
                   <button
                     onClick={() => {
@@ -205,9 +220,9 @@ const Plots = () => {
                       setStatusFilter('all');
                       setPriceFilter('all');
                     }}
-                    className="mt-4 text-primary hover:underline"
+                    className={`mt-4 text-primary hover:underline ${i18n.language === 'hi' ? 'font-hindi' : ''}`}
                   >
-                    Clear all filters
+                    {i18n.language === 'hi' ? 'सभी फ़िल्टर हटाएं' : 'Clear all filters'}
                   </button>
                 </div>
               )}

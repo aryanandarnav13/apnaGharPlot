@@ -8,6 +8,9 @@ import { FaMapMarkerAlt, FaRulerCombined, FaCheckCircle, FaPhone, FaEnvelope, Fa
 import MediaSlider from '../components/MediaSlider';
 import BackButton from '../components/BackButton';
 
+// Inline SVG fallback image (no external dependencies)
+const FALLBACK_IMAGE = 'data:image/svg+xml;base64,PHN2ZyB3aWR0aD0iODAwIiBoZWlnaHQ9IjYwMCIgeG1sbnM9Imh0dHA6Ly93d3cudzMub3JnLzIwMDAvc3ZnIj48cmVjdCB3aWR0aD0iODAwIiBoZWlnaHQ9IjYwMCIgZmlsbD0iI2VlZSIvPjx0ZXh0IHg9IjUwJSIgeT0iNTAlIiBmb250LWZhbWlseT0iQXJpYWwiIGZvbnQtc2l6ZT0iMjQiIGZpbGw9IiM5OTkiIHRleHQtYW5jaG9yPSJtaWRkbGUiIGR5PSIuM2VtIj5JbWFnZSBOb3QgRm91bmQ8L3RleHQ+PC9zdmc+';
+
 const PlotDetail = () => {
   const { id } = useParams();
   const navigate = useNavigate();
@@ -235,7 +238,7 @@ const PlotDetail = () => {
                     }
                   }
                   
-                  return mediaItems.length > 0 ? mediaItems : [{ type: 'image', url: 'https://via.placeholder.com/800x600' }];
+                  return mediaItems.length > 0 ? mediaItems : [{ type: 'image', url: FALLBACK_IMAGE }];
                 })()}
               />
             </div>

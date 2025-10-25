@@ -2,6 +2,9 @@ import React from 'react';
 import { useTranslation } from 'react-i18next';
 import { FaBed, FaBath, FaRulerCombined, FaRupeeSign } from 'react-icons/fa';
 
+// Inline SVG fallback image (no external dependencies)
+const FALLBACK_IMAGE = 'data:image/svg+xml;base64,PHN2ZyB3aWR0aD0iNDAwIiBoZWlnaHQ9IjMwMCIgeG1sbnM9Imh0dHA6Ly93d3cudzMub3JnLzIwMDAvc3ZnIj48cmVjdCB3aWR0aD0iNDAwIiBoZWlnaHQ9IjMwMCIgZmlsbD0iI2VlZSIvPjx0ZXh0IHg9IjUwJSIgeT0iNTAlIiBmb250LWZhbWlseT0iQXJpYWwiIGZvbnQtc2l6ZT0iMTgiIGZpbGw9IiM5OTkiIHRleHQtYW5jaG9yPSJtaWRkbGUiIGR5PSIuM2VtIj5ObyBJbWFnZTwvdGV4dD48L3N2Zz4=';
+
 const HouseDesignCard = ({ design }) => {
   const { i18n } = useTranslation();
   
@@ -17,9 +20,12 @@ const HouseDesignCard = ({ design }) => {
     <div className="bg-white rounded-lg shadow-lg overflow-hidden hover:shadow-xl transition-shadow border-2 border-transparent hover:border-bihar-yellow">
       <div className="relative">
         <img
-          src={design.image || 'https://via.placeholder.com/400x300'}
+          src={design.image || FALLBACK_IMAGE}
           alt={design.name}
           className="w-full h-56 object-cover"
+          onError={(e) => {
+            e.target.src = FALLBACK_IMAGE;
+          }}
         />
         <div className="absolute inset-0 bg-gradient-to-t from-black/70 to-transparent"></div>
         <h3 className={`absolute bottom-4 left-4 text-2xl font-bold text-white drop-shadow-lg ${i18n.language === 'hi' ? 'font-hindi' : 'font-montserrat'}`}>

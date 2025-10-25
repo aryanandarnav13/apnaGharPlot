@@ -5,6 +5,9 @@ import { FaUpload, FaLink, FaTimes, FaImage } from 'react-icons/fa';
 
 const API_URL = import.meta.env.VITE_API_URL || 'http://localhost:5000/api';
 
+// Inline SVG fallback image (no external dependencies)
+const FALLBACK_IMAGE = 'data:image/svg+xml;base64,PHN2ZyB3aWR0aD0iMjAwIiBoZWlnaHQ9IjE1MCIgeG1sbnM9Imh0dHA6Ly93d3cudzMub3JnLzIwMDAvc3ZnIj48cmVjdCB3aWR0aD0iMjAwIiBoZWlnaHQ9IjE1MCIgZmlsbD0iI2VlZSIvPjx0ZXh0IHg9IjUwJSIgeT0iNTAlIiBmb250LWZhbWlseT0iQXJpYWwiIGZvbnQtc2l6ZT0iMTIiIGZpbGw9IiM5OTkiIHRleHQtYW5jaG9yPSJtaWRkbGUiIGR5PSIuM2VtIj5JbnZhbGlkIFVSTDwvdGV4dD48L3N2Zz4=';
+
 const ImageUpload = ({ onImagesChange, existingImages = [], multiple = false, label = "Images" }) => {
   const [uploadMethod, setUploadMethod] = useState('url'); // 'url' or 'upload'
   const [imageUrl, setImageUrl] = useState('');
@@ -180,7 +183,7 @@ const ImageUpload = ({ onImagesChange, existingImages = [], multiple = false, la
                   alt={`Preview ${index + 1}`}
                   className="w-full h-32 object-cover rounded-lg"
                   onError={(e) => {
-                    e.target.src = 'https://via.placeholder.com/200x150?text=Invalid+URL';
+                    e.target.src = FALLBACK_IMAGE;
                   }}
                 />
                 <button
