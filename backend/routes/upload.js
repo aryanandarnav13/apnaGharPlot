@@ -4,6 +4,13 @@ const { uploadImages, uploadVideos, uploadMedia } = require('../middleware/uploa
 const { protect, authorize } = require('../middleware/auth');
 const cloudinary = require('../config/cloudinary');
 
+// Helper function to check if Cloudinary is configured
+const isCloudinaryConfigured = () => {
+  return process.env.CLOUDINARY_CLOUD_NAME && 
+         process.env.CLOUDINARY_API_KEY && 
+         process.env.CLOUDINARY_API_SECRET;
+};
+
 // @route   POST /api/upload/single
 // @desc    Upload single image
 // @access  Private/Admin
@@ -21,6 +28,14 @@ router.post('/single', protect, authorize('admin'), (req, res) => {
         return res.status(400).json({
           success: false,
           message: 'No file uploaded'
+        });
+      }
+
+      // Check if Cloudinary is configured
+      if (!isCloudinaryConfigured()) {
+        return res.status(500).json({
+          success: false,
+          message: 'Image upload service not configured. Please add Cloudinary credentials to environment variables.'
         });
       }
 
@@ -75,6 +90,14 @@ router.post('/multiple', protect, authorize('admin'), (req, res) => {
         return res.status(400).json({
           success: false,
           message: 'No files uploaded'
+        });
+      }
+
+      // Check if Cloudinary is configured
+      if (!isCloudinaryConfigured()) {
+        return res.status(500).json({
+          success: false,
+          message: 'Image upload service not configured. Please add Cloudinary credentials to environment variables.'
         });
       }
 
@@ -136,6 +159,14 @@ router.post('/media', protect, authorize('admin'), (req, res) => {
         return res.status(400).json({
           success: false,
           message: 'No files uploaded'
+        });
+      }
+
+      // Check if Cloudinary is configured
+      if (!isCloudinaryConfigured()) {
+        return res.status(500).json({
+          success: false,
+          message: 'Image upload service not configured. Please add Cloudinary credentials to environment variables.'
         });
       }
 
