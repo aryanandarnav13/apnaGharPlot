@@ -1,4 +1,4 @@
-# 🏡 ApnaGhar Plots
+# 🏡 ApnaGhar Plot
 
 A modern, full-stack web application for land selling and plot management business. Built with React, Node.js, Express, PostgreSQL, and Cloudinary for permanent image storage.
 
@@ -367,6 +367,7 @@ For any issues or questions, please open an issue on GitHub or contact the devel
 ## 👨‍💻 Developer
 
 Built for ApnaGhar Plots - Making land ownership accessible.
+
 
 
 
