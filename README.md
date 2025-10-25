@@ -1,121 +1,64 @@
-# ApnaGhar Plots LLP - Full Stack Real Estate Platform
+# 🏡 ApnaGhar Plots LLP
 
-A complete full-stack web application for land-selling business built with React, Node.js, Express, and PostgreSQL.
+A modern, full-stack web application for land selling and plot management business in Bihar. Built with React, Node.js, Express, PostgreSQL, and Cloudinary for permanent image storage.
 
-## 🌟 Features
+**Live Application**: [https://apna-ghar-plot.vercel.app](https://apna-ghar-plot.vercel.app)
+
+---
+
+## 📋 Description
+
+ApnaGhar Plots LLP is a bilingual (Hindi/English) real estate platform designed specifically for land selling businesses in Bihar. The application features a modern UI with traditional Bihar aesthetics, complete admin dashboard, inquiry management system, and secure cloud storage for media files.
+
+---
+
+## ✨ Key Features
 
 ### User Features
-- **Browse Projects & Plots**: View all available residential plots with detailed information
-- **Advanced Filtering**: Filter plots by project, status, price range, and size
-- **Plot Booking**: Secure booking system with multiple payment options
-- **User Dashboard**: Track bookings and manage profile
-- **House Design Gallery**: Pre-designed house concepts with estimated costs
-- **Google Maps Integration**: View project locations on interactive maps
-- **Responsive Design**: Fully responsive across desktop, tablet, and mobile
+- 🌐 **Bilingual Support** - Complete Hindi/English translations (default: Hindi)
+- 🏘️ **Browse Plots** - View available plots with images, videos, and detailed information
+- 🔍 **Smart Filters** - Filter by location, status, and price range (collapsible on mobile)
+- 📱 **Responsive Design** - Mobile-first, works seamlessly on all devices
+- 📞 **Inquiry System** - Submit inquiries to get contact details (no login required)
+- 🏠 **House Design Visualization** - View associated house designs for each plot
+- 🗺️ **Interactive Maps** - Google Maps integration for plot locations
+- 🎥 **Media Galleries** - Auto-sliding image and video carousels
+- 🔒 **Price Control** - Configurable price display (exact, masked, or hidden)
 
 ### Admin Features
-- **Dashboard Analytics**: Comprehensive statistics on plots, bookings, and revenue
-- **Project Management**: Full CRUD operations for projects
-- **Plot Management**: Add, edit, delete plots with status tracking
-- **House Design Management**: Manage pre-designed house concepts
-- **Booking Management**: View and update booking statuses
-- **User Management**: View all registered users and their bookings
+- 🔐 **Secure Admin Panel** - JWT-based authentication
+- 📊 **Dashboard** - Overview of plots and inquiries
+- 🏗️ **Plot Management** - Full CRUD operations for plots
+- 📧 **Inquiry Management** - Track and update inquiry status (Inquired, In Progress, Booked, Closed)
+- 🏘️ **House Design Management** - Manage house designs linked to plots
+- 👤 **Owner Info Management** - Display team/owner information on homepage
+- ⚙️ **Settings** - Configure default language, contact information
+- ☁️ **Cloud Storage** - Cloudinary integration for permanent image/video storage
+
+---
 
 ## 🛠️ Tech Stack
 
 ### Frontend
-- **React 18** - UI Library
+- **React** 18.2.0 - UI framework
 - **Vite** - Build tool
-- **React Router v6** - Routing
+- **React Router DOM** - Client-side routing
 - **Tailwind CSS** - Styling
+- **i18next** - Internationalization
 - **Axios** - HTTP client
-- **React Icons** - Icons
 - **React Toastify** - Notifications
 
 ### Backend
-- **Node.js** - Runtime
-- **Express.js** - Web framework
-- **PostgreSQL** - Database
-- **Sequelize** - ORM
+- **Node.js** - Runtime environment
+- **Express** 4.18.2 - Web framework
+- **Sequelize** 6.35.0 - ORM
+- **PostgreSQL** - Database (via pg & pg-hstore)
 - **JWT** - Authentication
 - **bcryptjs** - Password hashing
-- **CORS** - Cross-origin resource sharing
+- **Multer** - File upload handling
+- **Cloudinary** - Cloud media storage
 
-## 📋 Prerequisites
-
-- Node.js (v14 or higher)
-- PostgreSQL (v12 or higher)
-- npm or yarn
-
-## 🚀 Installation & Setup
-
-### 1. Clone the Repository
-
-```bash
-git clone <repository-url>
-cd apnaGharPlot
-```
-
-### 2. Backend Setup
-
-```bash
-cd backend
-
-# Install dependencies
-npm install
-
-# Create PostgreSQL database
-createdb apnaghar_plots
-
-# Or using psql
-psql -U postgres
-CREATE DATABASE apnaghar_plots;
-\q
-
-# Configure environment variables
-# Create .env file in backend directory with the following:
-PORT=5000
-NODE_ENV=development
-
-DB_HOST=localhost
-DB_PORT=5432
-DB_NAME=apnaghar_plots
-DB_USER=postgres
-DB_PASSWORD=your_password
-
-JWT_SECRET=your_super_secret_jwt_key_change_this_in_production
-JWT_EXPIRE=7d
-
-FRONTEND_URL=http://localhost:3000
-
-# Seed the database with sample data
-npm run seed
-
-# Start the backend server
-npm run dev
-```
-
-The backend server will run on `http://localhost:5000`
-
-### 3. Frontend Setup
-
-```bash
-cd frontend
-
-# Install dependencies
-npm install
-
-# Start the frontend development server
-npm run dev
-```
-
-The frontend will run on `http://localhost:3000`
-
-## 🔑 Demo Credentials
-
-### Admin Account
-- **Email**: admin@example.com
-- **Password**: password123
+---
 
 ## 📁 Project Structure
 
@@ -123,217 +66,312 @@ The frontend will run on `http://localhost:3000`
 apnaGharPlot/
 ├── backend/
 │   ├── config/
-│   │   ├── db.js                 # Database configuration
-│   │   └── seed.js               # Database seeder
+│   │   ├── db.js              # Database connection
+│   │   └── cloudinary.js      # Cloudinary configuration
 │   ├── middleware/
-│   │   ├── auth.js               # JWT authentication
-│   │   └── errorHandler.js      # Error handling
+│   │   ├── auth.js            # JWT authentication
+│   │   └── upload.js          # File upload (Multer + Cloudinary)
 │   ├── models/
 │   │   ├── User.js
-│   │   ├── Project.js
 │   │   ├── Plot.js
 │   │   ├── HouseDesign.js
-│   │   ├── Booking.js
-│   │   └── index.js              # Model associations
+│   │   ├── Inquiry.js
+│   │   ├── OwnerInfo.js
+│   │   └── Settings.js
 │   ├── routes/
-│   │   ├── auth.js               # Authentication routes
-│   │   ├── projects.js           # Project CRUD
-│   │   ├── plots.js              # Plot CRUD
-│   │   ├── houseDesigns.js       # House Design CRUD
-│   │   └── bookings.js           # Booking CRUD
-│   ├── .gitignore
-│   ├── package.json
-│   └── server.js                 # Main server file
+│   │   ├── auth.js
+│   │   ├── plots.js
+│   │   ├── houseDesigns.js
+│   │   ├── inquiries.js
+│   │   ├── ownerInfo.js
+│   │   ├── settings.js
+│   │   └── upload.js
+│   ├── .env                   # Environment variables
+│   ├── server.js              # Entry point
+│   └── package.json
 │
-├── frontend/
-│   ├── public/
-│   │   └── index.html
-│   ├── src/
-│   │   ├── components/
-│   │   │   ├── Navbar.jsx
-│   │   │   ├── Footer.jsx
-│   │   │   ├── PlotCard.jsx
-│   │   │   ├── HouseDesignCard.jsx
-│   │   │   ├── ProjectCard.jsx
-│   │   │   ├── PrivateRoute.jsx
-│   │   │   └── AdminRoute.jsx
-│   │   ├── context/
-│   │   │   └── AuthContext.jsx   # Authentication context
-│   │   ├── pages/
-│   │   │   ├── Home.jsx
-│   │   │   ├── Projects.jsx
-│   │   │   ├── PlotDetail.jsx
-│   │   │   ├── Login.jsx
-│   │   │   ├── Register.jsx
-│   │   │   ├── Dashboard.jsx
-│   │   │   ├── UserBookings.jsx
-│   │   │   ├── AdminDashboard.jsx
-│   │   │   └── admin/
-│   │   │       ├── AdminProjects.jsx
-│   │   │       ├── AdminPlots.jsx
-│   │   │       ├── AdminHouseDesigns.jsx
-│   │   │       └── AdminBookings.jsx
-│   │   ├── services/
-│   │   │   └── api.js            # API service layer
-│   │   ├── App.jsx
-│   │   ├── main.jsx
-│   │   └── index.css
-│   ├── .gitignore
-│   ├── package.json
-│   ├── vite.config.js
-│   ├── tailwind.config.js
-│   └── postcss.config.js
-│
-├── README.md
-└── Dockerfile
+└── frontend/
+    ├── public/
+    ├── src/
+    │   ├── components/
+    │   │   ├── Navbar.jsx
+    │   │   ├── Footer.jsx
+    │   │   ├── PlotCard.jsx
+    │   │   ├── MediaSlider.jsx
+    │   │   ├── ImageUpload.jsx
+    │   │   └── BackButton.jsx
+    │   ├── pages/
+    │   │   ├── Home.jsx
+    │   │   ├── Plots.jsx
+    │   │   ├── PlotDetail.jsx
+    │   │   ├── Login.jsx
+    │   │   ├── Dashboard.jsx
+    │   │   └── admin/
+    │   │       ├── AdminDashboard.jsx
+    │   │       ├── AdminPlots.jsx
+    │   │       ├── AdminHouseDesigns.jsx
+    │   │       ├── AdminInquiries.jsx
+    │   │       ├── AdminOwnerInfo.jsx
+    │   │       └── AdminSettings.jsx
+    │   ├── context/
+    │   │   └── AuthContext.jsx
+    │   ├── services/
+    │   │   └── api.js
+    │   ├── i18n/
+    │   │   ├── config.js
+    │   │   └── locales/
+    │   │       ├── en.json
+    │   │       └── hi.json
+    │   ├── App.jsx
+    │   └── main.jsx
+    ├── vercel.json            # Vercel routing config
+    └── package.json
 ```
-
-## 🎨 Branding
-
-- **Colors**:
-  - Primary (Green): #4CAF50
-  - Secondary (Sky Blue): #87CEEB
-  - White: #FFFFFF
-- **Fonts**:
-  - Headers: Montserrat Bold
-  - Body: Lato
-
-## 📊 Database Schema
-
-### Users Table
-- id, name, email, password, phone, role (user/admin), created_at, updated_at
-
-### Projects Table
-- id, name, location, description, total_area, num_plots, map_lat, map_lng, map_url, layout_image, status, created_at, updated_at
-
-### Plots Table
-- id, project_id (FK), plot_number, size, price, status (available/booked/sold), image, description, features, created_at, updated_at
-
-### House Designs Table
-- id, project_id (FK), name, description, size, bedrooms, bathrooms, estimated_cost, image, features, created_at, updated_at
-
-### Bookings Table
-- id, user_id (FK), plot_id (FK), project_id (FK), status (pending/confirmed/cancelled/completed), payment_method, amount, notes, created_at, updated_at
-
-## 🔒 API Endpoints
-
-### Authentication
-- `POST /api/auth/register` - Register new user
-- `POST /api/auth/login` - Login user
-- `GET /api/auth/me` - Get current user (Protected)
-
-### Projects
-- `GET /api/projects` - Get all projects
-- `GET /api/projects/:id` - Get single project
-- `POST /api/projects` - Create project (Admin)
-- `PUT /api/projects/:id` - Update project (Admin)
-- `DELETE /api/projects/:id` - Delete project (Admin)
-
-### Plots
-- `GET /api/plots` - Get all plots with filters
-- `GET /api/plots/:id` - Get single plot
-- `POST /api/plots` - Create plot (Admin)
-- `PUT /api/plots/:id` - Update plot (Admin)
-- `DELETE /api/plots/:id` - Delete plot (Admin)
-
-### House Designs
-- `GET /api/house-designs` - Get all house designs
-- `GET /api/house-designs/:id` - Get single house design
-- `POST /api/house-designs` - Create house design (Admin)
-- `PUT /api/house-designs/:id` - Update house design (Admin)
-- `DELETE /api/house-designs/:id` - Delete house design (Admin)
-
-### Bookings
-- `GET /api/bookings` - Get bookings (user's own or all for admin)
-- `GET /api/bookings/:id` - Get single booking
-- `POST /api/bookings` - Create booking (Protected)
-- `PUT /api/bookings/:id` - Update booking (Admin)
-- `DELETE /api/bookings/:id` - Delete booking (Protected)
-- `GET /api/bookings/stats/dashboard` - Get dashboard stats (Admin)
-
-## 🐳 Docker Deployment (Optional)
-
-### Using Docker Compose
-
-```bash
-# Build and run containers
-docker-compose up -d
-
-# Stop containers
-docker-compose down
-```
-
-### Manual Docker Setup
-
-```bash
-# Build the image
-docker build -t apnaghar-plots .
-
-# Run the container
-docker run -p 3000:3000 -p 5000:5000 apnaghar-plots
-```
-
-## 📝 Environment Variables
-
-### Backend (.env)
-```
-PORT=5000
-NODE_ENV=development
-DB_HOST=localhost
-DB_PORT=5432
-DB_NAME=apnaghar_plots
-DB_USER=postgres
-DB_PASSWORD=your_password
-JWT_SECRET=your_super_secret_jwt_key
-JWT_EXPIRE=7d
-FRONTEND_URL=http://localhost:3000
-```
-
-### Frontend (.env)
-```
-VITE_API_URL=http://localhost:5000/api
-```
-
-## 🧪 Testing
-
-The application includes:
-- Form validation on both frontend and backend
-- JWT authentication for secure routes
-- Error handling middleware
-- Input sanitization
-
-## 🚀 Production Deployment
-
-### Backend Deployment
-1. Set `NODE_ENV=production` in environment variables
-2. Use a production PostgreSQL database
-3. Enable SSL for database connections
-4. Set secure JWT_SECRET
-5. Configure CORS for your production domain
-6. Use process manager like PM2
-
-### Frontend Deployment
-1. Build the frontend: `npm run build`
-2. Serve the `dist` folder using a web server (Nginx, Apache)
-3. Configure environment variables for production API URL
-
-## 🤝 Contributing
-
-This is a complete project ready for deployment. Feel free to customize it according to your needs.
-
-## 📄 License
-
-MIT License - feel free to use this project for your business.
-
-## 👨‍💻 Author
-
-ApnaGhar Plots LLP Development Team
-
-## 📞 Support
-
-For support, email info@apnagharplots.com or call +91 98765 43210
 
 ---
 
-**Note**: This is a complete, production-ready application. Make sure to change all default passwords, JWT secrets, and other sensitive information before deploying to production.
+## 🚀 Local Development Setup
 
+### Prerequisites
+- Node.js (v16 or higher)
+- PostgreSQL (v13 or higher)
+- npm or yarn
+- Cloudinary account (free tier)
+
+### 1. Clone Repository
+```bash
+git clone <your-repo-url>
+cd apnaGharPlot
+```
+
+### 2. Backend Setup
+
+#### Install Dependencies
+```bash
+cd backend
+npm install
+```
+
+#### Configure Environment Variables
+Create `backend/.env` file:
+```env
+# Server
+PORT=5000
+NODE_ENV=development
+
+# Database (PostgreSQL)
+DATABASE_URL=postgresql://username:password@localhost:5432/apnaghar_plots
+
+# JWT
+JWT_SECRET=your_very_secure_jwt_secret_key_here
+JWT_EXPIRE=7d
+
+# CORS
+FRONTEND_URL=http://localhost:3000
+
+# Cloudinary (for image/video storage)
+CLOUDINARY_CLOUD_NAME=your_cloud_name
+CLOUDINARY_API_KEY=your_api_key
+CLOUDINARY_API_SECRET=your_api_secret
+```
+
+#### Create Database
+```bash
+# Login to PostgreSQL
+psql -U postgres
+
+# Create database
+CREATE DATABASE apnaghar_plots;
+\q
+```
+
+#### Start Backend Server
+```bash
+npm start
+# Server will run on http://localhost:5000
+```
+
+#### Seed Database (Optional)
+Visit: http://localhost:5000/api/seed-database
+
+This will create:
+- Admin user
+- Sample plots
+- Sample house designs
+- Sample inquiries
+- Owner info
+- Default settings
+
+### 3. Frontend Setup
+
+#### Install Dependencies
+```bash
+cd frontend
+npm install
+```
+
+#### Configure Environment Variables
+Create `frontend/.env` file:
+```env
+VITE_API_URL=http://localhost:5000/api
+```
+
+#### Start Frontend Server
+```bash
+npm run dev
+# App will run on http://localhost:3000
+```
+
+### 4. Access Application
+
+**Frontend**: http://localhost:3000  
+**Backend API**: http://localhost:5000/api
+
+**Admin Credentials**:
+- Email: admin@example.com
+- Password: password123
+
+---
+
+## 🌐 Production Deployment
+
+### Architecture
+- **Frontend**: Vercel
+- **Backend**: Render
+- **Database**: Render PostgreSQL
+- **Media Storage**: Cloudinary
+
+### 1. Setup Cloudinary
+
+1. Create free account: https://cloudinary.com/users/register/free
+2. Get credentials from dashboard:
+   - Cloud Name
+   - API Key
+   - API Secret
+
+### 2. Deploy Backend (Render)
+
+#### A. Create PostgreSQL Database
+1. Go to https://dashboard.render.com
+2. Click "New" → "PostgreSQL"
+3. Configure:
+   - Name: apnaghar-plots-db
+   - Region: Oregon (or closest)
+   - Plan: Free
+4. Click "Create Database"
+5. Copy **Internal Database URL**
+
+#### B. Create Web Service
+1. Click "New" → "Web Service"
+2. Connect your GitHub repository
+3. Configure:
+   - Name: apnagharplot-backend
+   - Root Directory: backend
+   - Environment: Node
+   - Build Command: `npm install`
+   - Start Command: `npm start`
+   - Plan: Free
+
+#### C. Set Environment Variables
+Add these in Render dashboard (Environment tab):
+```env
+NODE_ENV=production
+PORT=10000
+DATABASE_URL=<paste Internal Database URL from step A>
+JWT_SECRET=<generate strong random string>
+JWT_EXPIRE=7d
+FRONTEND_URL=https://apna-ghar-plot.vercel.app
+CLOUDINARY_CLOUD_NAME=<your cloud name>
+CLOUDINARY_API_KEY=<your API key>
+CLOUDINARY_API_SECRET=<your API secret>
+```
+
+4. Click "Create Web Service"
+5. Wait for deployment (3-5 minutes)
+6. Copy your backend URL: `https://apnagharplot-backend.onrender.com`
+
+#### D. Seed Production Database
+Visit: `https://apnagharplot-backend.onrender.com/api/seed-database`
+
+### 3. Deploy Frontend (Vercel)
+
+1. Go to https://vercel.com
+2. Import your GitHub repository
+3. Configure:
+   - Framework Preset: Vite
+   - Root Directory: frontend
+   - Build Command: `npm run build`
+   - Output Directory: dist
+
+4. Add Environment Variable:
+   ```
+   VITE_API_URL=https://apnagharplot-backend.onrender.com/api
+   ```
+
+5. Click "Deploy"
+6. Wait for deployment (1-2 minutes)
+7. Your app is live! 🎉
+
+### 4. Post-Deployment
+
+1. **Test the application**:
+   - Visit your Vercel URL
+   - Browse plots
+   - Submit test inquiry
+   - Login to admin panel
+
+2. **Change admin password**:
+   - Login with demo credentials
+   - Go to admin dashboard
+   - Change password immediately
+
+3. **Upload actual plot data**:
+   - Add your plots via admin panel
+   - Upload images (stored permanently on Cloudinary)
+   - Configure plot details, pricing, locations
+
+4. **Configure settings**:
+   - Set default language
+   - Update contact information
+   - Add owner/team information
+
+---
+
+## 🔑 Important Notes
+
+### Security
+- Change default admin password immediately after deployment
+- Never commit `.env` files to Git
+- Use strong JWT secret (32+ characters)
+- Keep Cloudinary credentials secure
+
+### Free Tier Limits
+- **Render**: Backend sleeps after 15 mins of inactivity (wakes up on request)
+- **Cloudinary**: 25 GB storage, 25 GB bandwidth/month
+- **Vercel**: Unlimited bandwidth for hobby projects
+
+### Troubleshooting
+- **Backend not responding**: Check Render logs for errors
+- **Images not loading**: Verify Cloudinary credentials
+- **CORS errors**: Check `FRONTEND_URL` matches your Vercel domain
+- **Database errors**: Verify `DATABASE_URL` is correct
+
+---
+
+## 📞 Support & Contact
+
+For any issues or questions, please open an issue on GitHub or contact the development team.
+
+---
+
+## 📄 License
+
+This project is licensed under the MIT License.
+
+---
+
+## 👨‍💻 Developer
+
+Built for ApnaGhar Plots LLP - Making land ownership accessible in Bihar.
+
+**Founder**: Deepak Kumar Singh
